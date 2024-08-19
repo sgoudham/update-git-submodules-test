@@ -7,3 +7,6 @@
 [submodule "ports/aur-packages"]
 	path = ports/aur-packages
 	url = https://github.com/catppuccin/aur-packages.git
+[submodule "the-best"]
+	path = ports/vscode-icons
+	url = https://github.com/catppuccin/vscode-icons.git
