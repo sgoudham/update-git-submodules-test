@@ -4,9 +4,6 @@
 [submodule "ports/mdBook"]
 	path = ports/mdBook
 	url = https://github.com/catppuccin/mdBook.git
-[submodule "ports/vscode-icons"]
-	path = ports/vscode-icons
-	url = https://github.com/catppuccin/vscode-icons.git
 [submodule "ports/aur-packages"]
 	path = ports/aur-packages
 	url = https://github.com/catppuccin/aur-packages.git
