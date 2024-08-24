@@ -29,4 +29,4 @@ jobs:
           commit-message: "feat: update all submodules"
           branch: "feat/update-all-submodules"
           title: "feat: update all submodules"
-          body: ${{ steps.submodules.outputs.updatedMarkdownTable }}
+          body: ${{ steps.submodules.outputs.prBody }}
