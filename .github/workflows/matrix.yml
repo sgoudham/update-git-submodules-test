@@ -1,0 +1,38 @@
+name: Multiple / Matrix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  single:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        submodule: [ports/nvim, ports/mdBook]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: "single-submodule"
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Update Submodules
+        id: submodules
+        uses: "sgoudham/update-git-submodules@main"
+        with:
+          submodules: ${{ matrix.submodule }}
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        if: ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}
+        with:
+          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
+          branch: "feat/update-vscode-icons-${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
+          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
+          body: ${{ steps.submodules.outputs.prBody }}
