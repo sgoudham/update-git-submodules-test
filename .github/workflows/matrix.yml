@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         submodule: [ports/nvim, ports/mdBook]
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -31,7 +30,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         if: ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}
         with:
-          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
-          branch: "feat/update-vscode-icons-${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
-          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
+          commit-message: "feat: update ${{ matrix.submodule }} to ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
+          branch: "feat/update-${{ matrix.submodule }}-${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
+          title: "feat: update ${{ matrix.submodule }} submodule to ${{ steps.submodules.outputs[format('{0}--latestTag', matrix.submodule)] }}"
           body: ${{ steps.submodules.outputs.prBody }}
