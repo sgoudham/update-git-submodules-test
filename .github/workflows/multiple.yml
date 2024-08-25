@@ -1,0 +1,58 @@
+name: Multiple / Multiple PR
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  multiple:
+    runs-on: ubuntu-latest
+    env:
+      nvim: "ports/nvim"
+      mdBook: "ports/mdBook"
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Update Submodules
+        id: submodules
+        uses: "sgoudham/update-git-submodules@main"
+        with:
+          submodules: |
+            ${{ env.nvim }}
+            ${{ env.mdBook }}
+
+      - name: Export Submodule Tags
+        id: tags
+        run: |
+          echo "nvimTag=${{ steps.submodules.outputs[format('{0}--latestTag', env.nvim)] }}" >> "$GITHUB_OUTPUT"
+          echo "nvimPrBody=${{ steps.submodules.outputs[format('{0}--prBody', env.nvim)] }}" >> "$GITHUB_OUTPUT"
+          echo "mdBookTag=${{ steps.submodules.outputs[format('{0}--latestTag', env.mdBook)] }}" >> "$GITHUB_OUTPUT"
+          echo "mdBookPrBody=${{ steps.submodules.outputs[format('{0}--prBody', env.mdBook)] }}" >> "$GITHUB_OUTPUT"
+
+      - name: PR for Neovim
+        uses: peter-evans/create-pull-request@v6
+        if: ${{ steps.tags.outputs.nvimTag }}
+        with:
+          add-paths: ${{ env.nvim }}
+          commit-message: "feat: update catppuccin/nvim to ${{ steps.tags.outputs.nvimTag }}"
+          branch: "feat/update-catppuccin-nvim-${{ steps.tags.outputs.nvimTag }}"
+          title: "feat: update catppuccin/nvim submodule to ${{ steps.tags.outputs.nvimTag }}"
+          body: ${{ steps.tags.outputs.nvimPrBody }}
+
+      - name: PR for mdBook
+        uses: peter-evans/create-pull-request@v6
+        if: ${{ steps.tags.outputs.mdBookTag }}
+        with:
+          add-paths: ${{ env.mdBook }}
+          commit-message: "feat: update catppuccin/mdBook to ${{ steps.tags.outputs.mdBookTag }}"
+          branch: "feat/update-catppuccin-mdBook-${{ steps.tags.outputs.mdBookTag }}"
+          title: "feat: update catppuccin/mdBook submodule to ${{ steps.tags.outputs.mdBookTag }}"
+          body: ${{ steps.tags.outputs.mdBookPrBody }}
