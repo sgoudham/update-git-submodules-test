@@ -29,13 +29,18 @@ jobs:
             ${{ env.nvim }}
             ${{ env.mdBook }}
 
-      - name: Export Submodule Tags
+      - name: Parse Submodule Outputs
         id: tags
         run: |
           echo "nvimTag=${{ steps.submodules.outputs[format('{0}--latestTag', env.nvim)] }}" >> "$GITHUB_OUTPUT"
-          echo "nvimPrBody=${{ steps.submodules.outputs[format('{0}--prBody', env.nvim)] }}" >> "$GITHUB_OUTPUT"
+          echo 'nvimPrBody<<EOF' >> $GITHUB_OUTPUT
+          echo "${{ steps.submodules.outputs[format('{0}--prBody', env.nvim)] }}" >> "$GITHUB_OUTPUT"
+          echo 'EOF' >> $GITHUB_OUTPUT
+
           echo "mdBookTag=${{ steps.submodules.outputs[format('{0}--latestTag', env.mdBook)] }}" >> "$GITHUB_OUTPUT"
-          echo "mdBookPrBody=${{ steps.submodules.outputs[format('{0}--prBody', env.mdBook)] }}" >> "$GITHUB_OUTPUT"
+          echo 'mdBookPrBody<<EOF' >> $GITHUB_OUTPUT
+          echo "${{ steps.submodules.outputs[format('{0}--prBody', env.mdBook)] }}" >> "$GITHUB_OUTPUT"
+          echo 'EOF' >> $GITHUB_OUTPUT
 
       - name: PR for Neovim
         uses: peter-evans/create-pull-request@v6
