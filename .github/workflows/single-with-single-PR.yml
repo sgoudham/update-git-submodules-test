@@ -22,8 +22,6 @@ jobs:
       - name: Update Submodules
         id: submodules
         uses: sgoudham/update-git-submodules@main
-        with:
-          strategy: tag
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v6
