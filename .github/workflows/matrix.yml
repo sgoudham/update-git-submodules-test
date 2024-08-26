@@ -28,9 +28,9 @@ jobs:
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v6
-        if: ${{ steps.submodules.outputs[format('{0}--latestCommit', matrix.submodule)] }}
+        if: ${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}
         with:
-          commit-message: "feat: update ${{ matrix.submodule }} to ${{ steps.submodules.outputs[format('{0}--latestCommit', matrix.submodule)] }}"
-          branch: "feat/update-${{ matrix.submodule }}-${{ steps.submodules.outputs[format('{0}--latestCommit', matrix.submodule)] }}"
-          title: "feat: update ${{ matrix.submodule }} submodule to ${{ steps.submodules.outputs[format('{0}--latestCommit', matrix.submodule)] }}"
+          commit-message: "feat: update ${{ matrix.submodule }} to ${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}"
+          branch: "feat/update-${{ matrix.submodule }}-${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}"
+          title: "feat: update ${{ matrix.submodule }} submodule to ${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}"
           body: ${{ steps.submodules.outputs.prBody }}
