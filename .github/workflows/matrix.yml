@@ -12,7 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        submodule: [ports/nvim, ports/mdBook]
+        submodule:
+          [ports/nvim, ports/mdBook, ports/vscode-icons, ports/aur-packages]
         include:
           - submodule: ports/nvim
             strategy: "tag"
@@ -20,7 +21,7 @@ jobs:
           - submodule: ports/mdBook
             strategy: "commit"
             latest: "latestShortCommitSha"
-          - submodule: ports/mdBook
+          - submodule: ports/vscode-icons
             strategy: "commit"
             latest: "latestShortCommitSha"
           - submodule: ports/aur-packages
