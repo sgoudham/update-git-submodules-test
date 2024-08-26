@@ -1,4 +1,4 @@
-name: Multiple / Matrix
+name: Multiple / Matrix (Tag & Commit)
 
 on:
   workflow_dispatch:
@@ -28,7 +28,7 @@ jobs:
 
       - name: Create PR
         uses: peter-evans/create-pull-request@v6
-        if: ${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}
+        if: ${{ steps.submodules.outputs[format('{0}--updated', matrix.submodule)] }}
         with:
           commit-message: "feat: update ${{ matrix.submodule }} to ${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}"
           branch: "feat/update-${{ matrix.submodule }}-${{ steps.submodules.outputs[format('{0}--latestShortCommitSha', matrix.submodule)] }}"

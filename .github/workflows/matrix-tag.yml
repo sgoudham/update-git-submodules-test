@@ -1,0 +1,50 @@
+name: Multiple / Matrix (Tag)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-submodule:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        submodule: [ports/nvim, ports/mdBook]
+        include:
+          - submodule: ports/nvim
+            strategy: "tag"
+            latest: "latestTag"
+          - submodule: ports/mdBook
+            strategy: "commit"
+            latest: "latestShortCommitSha"
+          - submodule: ports/mdBook
+            strategy: "commit"
+            latest: "latestShortCommitSha"
+          - submodule: ports/aur-packages
+            strategy: "tag"
+            latest: "latestTag"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Update Submodules
+        id: submodules
+        uses: sgoudham/update-git-submodules@8270b1a2ef7942588cb83fd73a977bda244554b9
+        with:
+          submodules: ${{ matrix.submodule }}
+          strategy: ${{ matrix.strategy }}
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        if: ${{ steps.submodules.outputs[format('{0}--updated', matrix.submodule)] }}
+        with:
+          commit-message: "feat: update ${{ matrix.submodule }} to ${{ steps.submodules.outputs[format('{0}--{1}', matrix.submodule, matrix.latest)] }}"
+          branch: "feat/update-${{ matrix.submodule }}-${{ steps.submodules.outputs[format('{0}--{1}', matrix.submodule, matrix.latest)] }}"
+          title: "feat: update ${{ matrix.submodule }} submodule to ${{ steps.submodules.outputs[format('{0}--{1}', matrix.submodule, matrix.latest)] }}"
+          body: ${{ steps.submodules.outputs.prBody }}

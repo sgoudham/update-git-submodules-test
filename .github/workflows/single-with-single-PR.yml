@@ -1,0 +1,35 @@
+name: Single / Single PR (Commit)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  single:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: "single-submodule"
+          submodules: "recursive"
+          fetch-depth: 0
+
+      - name: Update Submodules
+        id: submodules
+        uses: sgoudham/update-git-submodules@8270b1a2ef7942588cb83fd73a977bda244554b9
+        with:
+          strategy: tag
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v6
+        if: ${{ steps.submodules.outputs['vscode-icons--updated'] }}
+        with:
+          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
+          branch: "feat/update-vscode-icons-${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
+          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
+          body: ${{ steps.submodules.outputs.prBody }}
