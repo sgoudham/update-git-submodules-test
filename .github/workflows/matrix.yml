@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        submodule:
-          [ports/nvim, ports/mdBook, ports/vscode-icons, ports/aur-packages]
+        submodule: [ports/nvim, ports/mdBook, ports/vscode-icons]
         include:
           - submodule: ports/nvim
             strategy: "tag"
@@ -24,9 +23,6 @@ jobs:
           - submodule: ports/vscode-icons
             strategy: "commit"
             latest: "latestShortCommitSha"
-          - submodule: ports/aur-packages
-            strategy: "tag"
-            latest: "latestTag"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -36,7 +32,7 @@ jobs:
 
       - name: Update Submodules
         id: submodules
-        uses: sgoudham/update-git-submodules@caec228ba25f49179eac6263b6fd0d19bd258537
+        uses: sgoudham/update-git-submodules@main
         with:
           submodules: ${{ matrix.submodule }}
           strategy: ${{ matrix.strategy }}

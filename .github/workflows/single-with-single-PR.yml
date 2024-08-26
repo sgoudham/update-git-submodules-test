@@ -21,7 +21,7 @@ jobs:
 
       - name: Update Submodules
         id: submodules
-        uses: sgoudham/update-git-submodules@caec228ba25f49179eac6263b6fd0d19bd258537
+        uses: sgoudham/update-git-submodules@main
         with:
           strategy: tag
 
