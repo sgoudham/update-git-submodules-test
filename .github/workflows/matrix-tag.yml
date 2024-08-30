@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        submodule: [ports/nvim, ports/mdBook]
+        submodule: [ports/nvim, ports/mdBook, ports/vscode-icons]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
