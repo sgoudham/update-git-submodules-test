@@ -27,7 +27,7 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         if: ${{ steps.submodules.outputs['vscode-icons--updated'] }}
         with:
-          commit-message: "feat: update catppuccin/vscode-icons to ${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
+          commit-message: "feat: update ${{ steps.submodules.outputs['vscode-icons--remoteName'] }} to ${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
           branch: "feat/update-vscode-icons-${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
-          title: "feat: update catppuccin/vscode-icons submodule to ${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
+          title: "feat: update ${{ steps.submodules.outputs['vscode-icons--remoteName'] }} submodule to ${{ steps.submodules.outputs['vscode-icons--latestShortCommitSha'] }}"
           body: ${{ steps.submodules.outputs.prBody }}
